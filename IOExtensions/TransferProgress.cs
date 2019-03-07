@@ -22,20 +22,19 @@ namespace IOExtensions
 
         public double BytesPerSecond { get; }
 
-        public double Fraction
+        public double Fraction => BytesTransferred / (double)Total;
+
+        public double Percentage => 100.0 * Fraction;
+
+
+        public string GetTotalTransferedFormatted(SuffixStyle suffixStyle, int decimalPlaces)
         {
-            get
-            {
-                return BytesTransferred / (double)Total;
-            }
+            return Helpers.ToSizeWithSuffix(Total, suffixStyle, decimalPlaces);
         }
 
-        public double Percentage
+        public string GetTotalTransferedFormatted(SuffixStyle suffixStyle, string format)
         {
-            get
-            {
-                return 100.0 * Fraction;
-            }
+            return Helpers.ToSizeWithSuffix(Total, suffixStyle, format);
         }
 
         public string GetBytesTransferedFormatted(SuffixStyle suffixStyle, int decimalPlaces)
@@ -43,14 +42,34 @@ namespace IOExtensions
             return Helpers.ToSizeWithSuffix(BytesTransferred, suffixStyle, decimalPlaces);
         }
 
+        public string GetBytesTransferedFormatted(SuffixStyle suffixStyle, string format)
+        {
+            return Helpers.ToSizeWithSuffix(BytesTransferred, suffixStyle, format);
+        }
+
         public string GetDataPerSecondFormatted(SuffixStyle suffixStyle, int decimalPlaces)
         {
-            return string.Format("{0}/sec", Helpers.ToSizeWithSuffix((long)BytesPerSecond, suffixStyle, decimalPlaces));
+            return $"{Helpers.ToSizeWithSuffix((long) BytesPerSecond, suffixStyle, decimalPlaces)}/sec";
+        }
+
+        public string GetDataPerSecondFormatted(SuffixStyle suffixStyle, string format)
+        {
+            return $"{Helpers.ToSizeWithSuffix((long)BytesPerSecond, suffixStyle, format)}/sec";
         }
 
         public override string ToString()
         {
-            return string.Format("Total: {0}, BytesTransferred: {1}, Percentage: {2}", Total, BytesTransferred, Percentage);
+            return $"Total: {Total}, BytesTransferred: {BytesTransferred}, Percentage: {Percentage}";
+        }
+
+        public string ToStringFormatted(SuffixStyle style = SuffixStyle.Windows, string format = "{0:0.0}")
+        {
+            return $"Total: {GetTotalTransferedFormatted(style, format)}, BytesTransferred: {GetBytesTransferedFormatted(style, format)}, Percentage: {Percentage}";
+        }
+
+        public string ToStringFormatted(SuffixStyle style = SuffixStyle.Windows, int decimalPlaces = 1)
+        {
+            return $"Total: {GetTotalTransferedFormatted(style, decimalPlaces)}, BytesTransferred: {GetBytesTransferedFormatted(style, decimalPlaces)}, Percentage: {Percentage}";
         }
     }
 }
