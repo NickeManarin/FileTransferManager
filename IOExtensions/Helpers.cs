@@ -35,7 +35,7 @@ namespace IOExtensions
             if (string.IsNullOrWhiteSpace(format))
                 throw new ArgumentOutOfRangeException(nameof(format), "The format can't be null.");
 
-            if (value == 0)
+            if (value <= 0)
                 return string.Format($"{format} bytes", 0);
 
             //mag is 0 for bytes, 1 for KB, 2, for MB, etc.
